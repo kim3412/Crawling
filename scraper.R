@@ -93,6 +93,7 @@ for (i in 1:length(postList)){
   tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_number")
   tmpText = as.character(tmp$getElementText())
   boardNumVec[i] = tmpText
+  urlVec[i] = paste0("https://cafe.naver.com/joonggonara/", tmpText, sep="")
   
   # writerVec
   tmp = postList[[i]]$findChildElement(using="css", value="td.td_name a")
@@ -106,12 +107,18 @@ for (i in 1:length(postList)){
   print(tmpText)
   numOfViewsVec[i] = tmpText
   
-  # urlVec
+  # titleVec
   tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_list > a")
-  tmpText = as.character(tmp$getElementAttribute("href"))
-  urlVec[i] = tmpText
-  tmpText2 = as.character(tmp$getElementText())
-  titleVec[i] = tmpText2
+  tmpText = as.character(tmp$getElementText())
+  titleVec[i] = tmpText
+  
+  # priceVec
+  remDr$navigate(urlVec[i])
+  remDr$switchToFrame("cafe_main")
+  
+  tmp = remDr$findElement(using="css", value=".cost")
+  tmpText = as.character(tmp$getElementText())
+  priceVec[i] = tmpText
 }
 
 ####### close
