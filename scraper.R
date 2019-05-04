@@ -109,7 +109,7 @@ for (i in 1:length(postList)){
   # urlVec
   tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_list > a")
   tmpText = as.character(tmp$getElementAttribute("href"))
-  numOfViewsVec[i] = tmpText
+  urlVec[i] = tmpText
   tmpText2 = as.character(tmp$getElementText())
   titleVec[i] = tmpText2
 }
