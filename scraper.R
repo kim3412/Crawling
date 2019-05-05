@@ -10,9 +10,10 @@ remDr$open() ### sometimes failure
 remDr$navigate("https://nid.naver.com/nidlogin.login")
 
 id = remDr$findElement(using="id", value="id")
+id$setElementAttribute("value", "your id")
+
 pw = remDr$findElement(using="id", value="pw")
-id$sendKeysToElement(list("yourId"))
-pw$sendKeysToElement(list("yourPw"))
+pw$setElementAttribute("value", "your password")
 
 loginBtn = remDr$findElement(using="css", value=".btn_global")
 loginBtn$clickElement()
@@ -71,55 +72,113 @@ pageUrl = gsub("%BE%C6%C0%CC%C6%D0%B5%E5%BE%C6%C0%CC%C6%D0%B5%E5", "%BE%C6%C0%CC
 remDr$navigate(pageUrl)
 remDr$switchToFrame("cafe_main")
 
+# get link which contains search.page
+tmp = remDr$findElement(using="css", value="#main-area div.prev-next a")
+pageUrl = tmp$getElementAttribute("href")
 
-####### get infomation from search result
-### board-number, writer, number of views, url, title
-### sales status, price are not always exists(so handle exception)
 
-# get posts list
-postList = remDr$findElements(using="css", value="#main-area  > div:nth-child(5) > table > tbody > tr")
-
-# variables
-boardNumVec = c()
-writerVec = c()
-numOfViewsVec = c()
-urlVec = c()
-titleVec = c()
-slaesStatusVec = c()
-priceVec = c()
-
-for (i in 1:length(postList)){
-  # boardNumVec
-  tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_number")
-  tmpText = as.character(tmp$getElementText())
-  boardNumVec[i] = tmpText
-  urlVec[i] = paste0("https://cafe.naver.com/joonggonara/", tmpText, sep="")
+####### get yesterday's posts
+ydf = data.frame(matrix(nrow=0, ncol=7))
+page = 1
+while(TRUE){
   
-  # writerVec
-  tmp = postList[[i]]$findChildElement(using="css", value="td.td_name a")
-  tmpText = as.character(tmp$getElementText())
-  writerVec[i] = tmpText
-  
-  # number of views
-  tmp = postList[[i]]$findChildElement(using="css", value="td.td_view")
-  print("tmp created")
-  tmpText = as.character(tmp$getElementText())
-  print(tmpText)
-  numOfViewsVec[i] = tmpText
-  
-  # titleVec
-  tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_list > a")
-  tmpText = as.character(tmp$getElementText())
-  titleVec[i] = tmpText
-  
-  # priceVec
-  remDr$navigate(urlVec[i])
+  remDr$navigate(pageUrl)
+  Sys.sleep(sample(3:6, 1))
   remDr$switchToFrame("cafe_main")
   
-  tmp = remDr$findElement(using="css", value=".cost")
-  tmpText = as.character(tmp$getElementText())
-  priceVec[i] = tmpText
+  ####### get infomation from search result
+  ### board-number, url, nickname, number of views, title
+  ### sales status, price are not always exists(so handle exception)
+  
+  # get posts list
+  postList = remDr$findElements(using="css", value="#main-area  > div:nth-child(5) > table > tbody > tr")
+  
+  # variables
+  boardNumVec = c()
+  nickVec = c()
+  numOfViewsVec = c()
+  urlVec = c()
+  titleVec = c()
+  saleStatusVec = c()
+  priceVec = c()
+  sellerVec = c()
+
+  for (i in 1:length(postList)){
+    
+    # boardNumVec and urlVec
+    tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_number")
+    tmpText = as.character(tmp$getElementText())
+    boardNumVec[i] = tmpText
+    urlVec[i] = paste0("https://cafe.naver.com/joonggonara/", tmpText, sep="")
+     
+    # nickVec
+    tmp = postList[[i]]$findChildElement(using="css", value="td.td_name a")
+    tmpText = as.character(tmp$getElementText())
+    nickVec[i] = tmpText
+    
+    # number of views
+    tmp = postList[[i]]$findChildElement(using="css", value="td.td_view")
+    tmpText = as.character(tmp$getElementText())
+    numOfViewsVec[i] = tmpText
+    
+    # titleVec
+    tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_list > a")
+    tmpText = as.character(tmp$getElementText())
+    titleVec[i] = tmpText
+        
+    Sys.sleep(sample(4:8, 1))
+  }
+
+  for(i in 1:length(urlVec)){
+    print(i)
+    # saleStatusVec
+    remDr$navigate(urlVec[i])
+    remDr$switchToFrame("cafe_main")
+    
+    tryCatch({
+      tmp = remDr$findElement(using="tag name", value="em")
+      tmpText = as.character(tmp$getElementAttribute("aria-label"))
+      saleStatusVec[i] = tmpText
+      
+      # sellerVec
+      if(tmpText == "완료"){
+        sellerVec[i] = NA
+      }
+      else{
+        tmp = remDr$findElement(using="id", value="bt_email")
+        tmpText = as.character(tmp$getElementText())
+        sellerVec[i] = tmpText
+      }
+      
+      # priceVec
+      tmp = remDr$findElement(using="css", value=".cost")
+      tmpText = as.character(tmp$getElementText())
+      priceVec[i] = tmpText
+    },
+    error = function(e){
+      saleStatusVec[i] = NA
+      sellerVec[i] = NA
+      priceVec[i] = NA
+    },
+    finally = {
+      Sys.sleep(sample(30:52, 1))
+    })  
+  }
+  
+  # combine the infomation on each vector into datframe ydf
+  ydf = rbind(ydf, cbind(boardNumVec, urlVec, nickVec, numOfViewsVec, titleVec, saleStatusVec, priceVec, sellerVec))
+  
+  # sometimes even if it is not in the end of list, it stops
+  # maybe have some problems during get postList and can't get 50 trs.
+  if(length(postList) != 50) break
+  page = page + 1
+  pageNum = paste0("search.page=", page, sep="")
+  pageUrl = gsub("search.page=.*", pageNum, pageUrl)
+  
 }
+
+####### write data to file
+write.table(ydf, "D:/scrap/scrapInfo.csv", sep=",", append=TRUE, na="NA")
 
 ####### close
 remDr$close() 
