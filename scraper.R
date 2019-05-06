@@ -57,9 +57,7 @@ pageUrl = gsub("userDisplay.*&search.media", mDisplay, pageUrl)
 
 # modify the value of searchdate to yesterday(eg.2019-05-022019-05-02)
 # get yesterday date
-ydate = Sys.Date()
-ydate = as.numeric(ydate) - 1
-ydate = as.Date(ydate, origin='1970-01-01')
+ydate = Sys.Date() - 1
 ydate = as.character(ydate)
 
 mDate = paste0("searchdate=", ydate, ydate, "&search.searchBy", sep="")
@@ -78,7 +76,7 @@ pageUrl = tmp$getElementAttribute("href")
 
 
 ####### get yesterday's posts
-ydf = data.frame(matrix(nrow=0, ncol=7))
+ydf = data.frame(matrix(nrow=0, ncol=9))
 page = 1
 while(TRUE){
   
@@ -130,12 +128,13 @@ while(TRUE){
   }
 
   for(i in 1:length(urlVec)){
-    print(i)
-    # saleStatusVec
-    remDr$navigate(urlVec[i])
-    remDr$switchToFrame("cafe_main")
     
     tryCatch({
+      
+      # saleStatusVec
+      remDr$navigate(urlVec[i])
+      remDr$switchToFrame("cafe_main")
+      
       tmp = remDr$findElement(using="tag name", value="em")
       tmpText = as.character(tmp$getElementAttribute("aria-label"))
       saleStatusVec[i] = tmpText
@@ -167,7 +166,11 @@ while(TRUE){
   
   # combine the infomation on each vector into datframe ydf
   ydf = rbind(ydf, cbind(boardNumVec, urlVec, nickVec, numOfViewsVec, titleVec, saleStatusVec, priceVec, sellerVec))
-  
+  tdate = format(Sys.Date()-1, "%Y.%m.%d.")
+  dateVec = rep(tdate, nrow(ydf))
+  edate = ifelse(saleStatusVec == "완료", tdate, NA)
+  ydf = cbind(ydf, tdate, edate)
+
   # sometimes even if it is not in the end of list, it stops
   # maybe have some problems during get postList and can't get 50 trs.
   if(length(postList) != 50) break
@@ -178,7 +181,7 @@ while(TRUE){
 }
 
 ####### write data to file
-write.table(ydf, "D:/scrap/scrapInfo.csv", sep=",", append=TRUE, na="NA")
+write.table(ydf, "D:/scrap/scrapInfo.csv", sep=",", append=TRUE, na="NA", row.names=FALSE, col.names=FALSE)
 
 ####### close
 remDr$close() 
