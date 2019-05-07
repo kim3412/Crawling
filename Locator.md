@@ -29,11 +29,13 @@ class, name, id가 없는 element에 접근 가능
 ### CSS Selector
 HTML의 tag, id, class, attributes를 조합하여 요소를 선택하는 문자열 패턴  
 id나 name이 없는 element에도 접근이 가능
+CSS Selector 문법에 대한 참조는 <a href="https://saucelabs.com/resources/articles/selenium-tips-css-selectors">여기</a>
 
 ### CSS Selecotr와 XPath 비교
 CSS Selector선호하는 사람들: 단순하고 속도도 빠르고 성능도 좋음(IE에 대해서)  
 XPath 선호하는 사람들: 페이지를 가로지를 수 있음(child to parent 방향으로 접근 가능)  
 (CSS는 forward 방향으로만 탐색가능하나 XPath는 forward/backward모두 가능)
 
-참조:
+참조:  
+locator:  
 https://www.protechtraining.com/content/selenium_tutorial-locators
