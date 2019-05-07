@@ -12,10 +12,10 @@ Selenium Webdriver API와 R을 바인딩 해줌
 <p>&nbsp;&nbsp;&nbsp;&nbsp;WebDriver와 Browser는 Driver를 통해 통신
 
 #### WebDriver
-<p>&nbsp;&nbsp;&nbsp;&nbsp;Selenium 1.x의 RC를 개선한 것으로, 보다 간결한 프로그래밍 인터페이스를 제공하며, 브라우저를 훨씬 더 효과적으로 구동함. 무엇보다 새로운 기능이 추가됨(파일 업로드, 다운로드, 팝업, 대화 상자).</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;Selenium 1.x의 RC를 개선한 것으로, 보다 간결한 프로그래밍 인터페이스를 제공하며, 브라우저를 훨씬 더 효과적으로 구동함. 무엇보다 새로운 기능이 추가됨(파일 업로드, 다운로드, 팝업, 대화 상자). 실사용자가 브라우저를 사용하는 방식을 최대한 가깝게 모방하는 것이 목표임. WebDriver 바이너리를 시스템 환경변수에 추가해야 함.</p>
 
 #### Driver
-<p>&nbsp;&nbsp;&nbsp;&nbsp;실제로 브라우저를 제어, 브라우저에 따라 드라이버가 다르므로 원하는 브라우저의 드라이버를 다운받아 이용하면 됨.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;실제로 브라우저를 제어, 프록시라고도 부름. 브라우저에 따라 드라이버가 다르므로 원하는 브라우저의 드라이버를 다운받아 이용하면 됨(브라우저 세션을 설정하는 방법이 약간씩 다름). Chrome, Firefox, Edge, Internet Explorer, Opera, Safari, HtmlUnit, PhantomJS 등의 드라이버가 존재</p>
 
 #### 참고
 https://seleniumhq.github.io/docs/wd.html
