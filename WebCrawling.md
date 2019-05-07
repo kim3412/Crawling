@@ -25,5 +25,7 @@ Web Driver는 웹브라우저 UI 테스팅 툴로 동적 로딩을 지원하고 
 게시글 정보를 제공하는 API는 존재하지 않으므로 Selenium을 이용하여 Web Driver를 구동시켰음.</p>
 
 #### 참조
-정적/동적 웹 페이지: https://titus94.tistory.com/category/%EC%9E%90%EA%B2%A9%EC%A6%9D/%EC%A0%84%EC%9E%90%EC%83%81%EA%B1%B0%EB%9E%98  
-크롤링 기법: https://www.slideshare.net/wangwonLee/2018-datayanolja-moreeffectivewebcrawling
+정적/동적 웹 페이지:  
+https://titus94.tistory.com/category/%EC%9E%90%EA%B2%A9%EC%A6%9D/%EC%A0%84%EC%9E%90%EC%83%81%EA%B1%B0%EB%9E%98  
+크롤링 기법:  
+https://www.slideshare.net/wangwonLee/2018-datayanolja-moreeffectivewebcrawling
