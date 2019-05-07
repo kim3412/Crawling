@@ -8,7 +8,7 @@
 <p>&nbsp;&nbsp;&nbsp;&nbsp;WebDriver와 Browser는 Driver를 통해 통신
 
 #### WebDriver
-<p>&nbsp;&nbsp;&nbsp;&nbsp;실사용자가 브라우저를 사용하는 방식과 비슷하게 동작하도록 하는 것이 목표임.Selenium 1.x의 RC를 개선한 것으로, 보다 간결한 프로그래밍 인터페이스를 제공하며, 브라우저를 훨씬 더 효과적으로 구동함. 무엇보다 새로운 기능이 추가됨(파일 업로드, 다운로드, 팝업, 대화 상자 등). WebDriver 바이너리를 시스템 환경변수에 추가해야 함.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;실사용자가 브라우저를 사용하는 방식과 비슷하게 동작하도록 하는 것이 목표임. Selenium 1.x의 RC를 개선한 것으로, 보다 간결한 프로그래밍 인터페이스를 제공하며, 브라우저를 훨씬 효율적으로 구동함. 무엇보다 새로운 기능이 추가됨(파일 업로드, 다운로드, 팝업, 대화 상자 등). WebDriver 바이너리를 시스템 환경변수에 추가해야 함.</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;웹 브라우저는 비동기적으로 동작하기 때문에 WebDriver는 DOM의 상태를 실시간으로 반영하지 않음. 따라서, 브라우저와 WebDriver 사용자의 명령 사이에 race condition이 발생할 수 있음. 즉, 페이지로 이동(navigate)하여 element를 찾으려 했을 때, element가 페이지가 로딩된 후에 추가되었다면 no such element 에러가 발생할 수 있음. explicitly waiting이나 blocking을 이용하여 위의 문제점을 해결할 수 있음. WebElement.click이나 WebElement.sendKeys와 같은 명령은 브라우저에서 명령이 완료될 때까지 기다려 동기화를 보장함.</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;Explicit Wait은 condition을 만족시킬 때까지 계속 시도함. 즉, conditin이 일어날 때까지 기다림. Implicit Wait은 일정 시간 동안 DOM을 polling함. Explicit Wait과 Implicit Wait을 함께 사용하면 의도하지 않은 결과가 나타나므로 둘 중 하나만 이용해야 함. Fluent Wait은 condition 만족 최대 대기시간과 condition 체크 빈도를 지정할 수 있음. 또한, 특정 예외를 무시하도록 할 수 있음.</p>
   
