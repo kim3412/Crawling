@@ -1,6 +1,6 @@
 # 코드 작성 과정
 
-### 1. 아이패드 
+### 1. 아이패드 검색
 중고나라 첫 화면<br>
 ![중고나라 첫 화면](./img/cafeHome.png)
 <br>빨간색 상자에 '아이패드'를 검색
@@ -116,8 +116,9 @@ https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=10050146
 &search.exclude=&search.option=0&search.sortBy=date&search.searchBy=1&search.searchBlockYn=0&search.includeAll=
 &search.query=%BE%C6%C0%CC%C6%D0%B5%E5&search.viewtype=title&search.page=2  
 
-카페에서 제공하는 기능과 브라우저에서 html코드를 주의깊게 봤더라면   
-필요로 하는 url을 한 번에 구할 수 있었을 것임  
+<strong>카페에서 제공하는 기능과 브라우저에서 html코드를 주의깊게 봤더라면  
+  <del>위와 같은 과정을 거치지 않았더라도  </del>
+필요로 하는 url을 한 번에 구할 수 있었을 것임  </strong>  
 
 끝 페이지에서는 게시글의 개수가 50이하일 것이므로  
 게시글의 개수가 50개가 아닐때까지 순회를 반복하면 됨  
@@ -141,3 +142,105 @@ while(TRUE){
 }
 ```
   
+### 5. 정보 긁어오기
+![검색결과에서 얻을 수 있는 정보](./img/infoFromList.png)
+<br>게시글 번호, 게시글 제목, 작성자 닉네임, 작성날짜, 조회수<br> 
+
+![검색결과에서 얻을 수 있는 정보](./img/postContent.png)
+<br>판매 진행 여부, 가격, 판매자 아이디  
+판매가 완료된 경우에는 판매자 아이디를 알 수 없음  
+게시글번호를 통해 게시글에 접근함을 알 수 있음  
+
+```r
+    # 정보를 저장할 변수 생성
+    boardNumVec = c() # 게시글 번호
+    nickVec = c() # 판매자의 닉네임
+    numOfViewsVec = c() # 조회수
+    urlVec = c() # 게시글에 접근하도록 해주는 url
+    titleVec = c() # 게시글 제목
+    saleStatusVec = c() # 판매 진행 여부
+    priceVec = c() # 상품 가격
+    sellerVec = c() # 판매자 아이디
+    
+    for (i in 1:length(postList)){
+      
+      # 게시글 번호를 이용하여 후에 게시글에 접근하기 위한 url을 생성
+      tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_number")
+      tmpText = as.character(tmp$getElementText())
+      boardNumVec[i] = tmpText
+      urlVec[i] = paste0("https://cafe.naver.com/joonggonara/", tmpText, sep="")
+      
+      # 닉네임
+      tmp = postList[[i]]$findChildElement(using="css", value="td.td_name a")
+      tmpText = as.character(tmp$getElementText())
+      nickVec[i] = tmpText
+      
+      # 조회수
+      tmp = postList[[i]]$findChildElement(using="css", value="td.td_view")
+      tmpText = as.character(tmp$getElementText())
+      numOfViewsVec[i] = tmpText
+      
+      # titleVec
+      tmp = postList[[i]]$findChildElement(using="css", value="td.td_article div.inner_list > a")
+      tmpText = as.character(tmp$getElementText())
+      titleVec[i] = tmpText
+      
+      Sys.sleep(sample(4:8, 1))
+    }
+    
+    for(i in 1:length(urlVec)){
+      
+      tryCatch({
+        # 위 페이지처럼 가격정보에 대한 형식이 존재하는 경우
+        # 판매 진행 여부
+        remDr$navigate(urlVec[i])
+        Sys.sleep(sample(3:6, 1))
+        remDr$switchToFrame("cafe_main")
+        
+        tmp = remDr$findElement(using="tag name", value="em")
+        tmpText = as.character(tmp$getElementAttribute("aria-label"))
+        saleStatusVec[i] = tmpText
+        
+        # 판매가 완료된 경우 판매자 아이디 정보 사라짐
+        if(tmpText == "완료"){
+          sellerVec[i] = NA
+        }
+        else{
+          tmp = remDr$findElement(using="id", value="bt_email")
+          tmpText = as.character(tmp$getElementText())
+          sellerVec[i] = tmpText
+        }
+        
+        # 가격
+        tmp = remDr$findElement(using="css", value=".cost")
+        tmpText = as.character(tmp$getElementText())
+        priceVec[i] = tmpText
+      },
+      # 위의 페이지처럼 형식화 되지 않은 게시글들도 존재
+      # 그럴 경우 판매여부, 가격, 판매자 아이디를 긁어오지 않음
+      error = function(e){
+        saleStatusVec[i] = NA
+        sellerVec[i] = NA
+        priceVec[i] = NA
+        print(e)
+      })
+      
+      Sys.sleep(sample(8:11, 1))
+    }
+    ```
+    
+    tryCatch를 이용하여 에러 처리를 함으로써  
+    위의 방법으로 정보를 긁어올 수 없는 페이지에 접근하더라도  
+    <strong>코드가 멈추지 않도록 함</strong>
+    
+    ### 6. 로그 파일 이용하기
+    코드가 자동으로 동작하는 동안 발생하는 문제점들을  
+    파일에 기록해 놓음으로써 나중에도 그 내용을 볼 수 있도록 함.
+    
+    ```r
+    # 로그를 기록할 파일 생성
+    tt = file("D:/scrap/0507.txt", open="at")
+    # console로 출력되는 내용과 에러 메시지를 file로 리다이렉션
+    sink(tt, type=c("output", "message"), append=TRUE)
+    ```
+    
