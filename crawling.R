@@ -166,7 +166,7 @@ while(TRUE){
 # then store data frame
 tdate = format(Sys.Date()-1, "%Y.%m.%d.")
 dateVec = rep(tdate, nrow(ydf))
-edate = ifelse(saleStatusVec == "완료", tdate, NA)
+edate = ifelse(ydf$saleStatusVec == "완료", tdate, NA)
 ydf = cbind(ydf, tdate, edate)
 write.table(ydf, "D:/scrap/scrapInfo.csv", sep=",", append=TRUE, na="NA", row.names = FALSE, col.names = FALSE)
 
