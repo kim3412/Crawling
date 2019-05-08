@@ -1,4 +1,9 @@
-# iframe(Inline Frame)
+# 코드 작성 과정
+
+### 1. url 찾기
+중고나라 첫 화면
+![중고나라 첫 화면](../img/cafehome.jpg, "중고나라 첫 화면")
+### iframe(Inline Frame)
 
 웹 페이지 안에 또 다른 웹 페이지 삽입  
 문서내의 원하는 위치에 삽입 가능
