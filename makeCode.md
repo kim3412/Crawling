@@ -257,5 +257,5 @@ tryCatch를 이용하여 에러 처리를 함으로써
 
 ※ 참조  
 네이버에 로그인 하는 경우  
-sendKeysToElement(list("str"))을 이용하는 경우 captcha에 의해 로그인 저지당함
+sendKeysToElement(list("str"))을 이용하는 경우 captcha에 의해 로그인 저지당함  
 setElementAttribute()를 이용하면 로그인 
