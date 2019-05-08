@@ -3,7 +3,7 @@ library(RSelenium)
 # set logfile name as yesterday's date
 ydate = Sys.Date() - 1
 ydate = as.character(ydate)
-logFileName = paste0("D:/scrap/", ydate, ".txt", open="at")
+logFileName = paste0("D:/scrap/", ydate, ".txt")
 # sink
 tt = file("D:/scrap/0507.txt", open="at")
 sink(tt, type=c("output", "message"), append=TRUE)
@@ -57,7 +57,6 @@ while(TRUE){
     ### sales status, price are not always exists(so handle exception)
     
     # get posts list
-    
     postList = remDr$findElements(using="css", value="#main-area  > div:nth-child(5) > table > tbody > tr")
     
     # variables
