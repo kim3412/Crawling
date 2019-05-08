@@ -19,7 +19,8 @@ queryInput$sendKeysToElement(list("\xEC\x95\x84\xEC\x9D\xB4\xED\x8C\xA8\xEB\x93\
 (상단의 내용과 좌측의 내용만 보임)
 
 ![네이버카페는 iframe으로 구성](./img/iframe.png)
-<br>naver cafe의 경우 iframe을 통해 구성되어 있음
+<br><br>
+naver cafe의 경우 iframe을 통해 구성되어 있음
 
 Selenium은 최상위의 문서만을 인식할 수 있음.  
 iframe에 있는 element를 이용하려면 창을 변경하는 것과 유사하게 frame을 변경해야 함.
@@ -41,6 +42,7 @@ remDr$switchToFrame("cafe_main")
 ```
 프레임을 변경하지 않으면 위에서와 같이 상단과 좌측의 내용만 보임  
 프레임을 변경하면 다시 15개의 아이템만 보임  
+  
 해결방법을 찾지 못해서 15개씩 얻어오기로 함  
 
 ### 4. 특정 날짜에 게시된 글만 보기
@@ -87,16 +89,55 @@ BE%C6%C0%CC%C6%D0%B5%E5
   
 기간이 입력되지 않았고, '아이패드아이패드'를 검색함  
 
-url을 살펴보면 searchdate, query, userDisplay 을 이용하여 원하는 결과를 얻을 수 있을 것이라고 추측할 수 있음  
+url을 살펴보면 searchdate, query, userDisplay 을 이용하여 원하는 결과를 얻을 수 있을 것임을 추측할 수 있음  
 searchdate를 2019-05-072019-05-07 로  
 query를 %BE%C6%C0%CC%C6%D0%B5%E5% 로  
 userDisplay를 50 으로  
 변경한 후 url을 이용하여 접근해 봄
 
 ![url 접근결과](./img/urlResult.png)
-<br> 원하는 날짜의 결과 50개를 얻었음을 알 수 있음  
+<br>원하는 날짜의 결과 50개를 얻었음을 알 수 있음  
+
 <strong>제목으로만 검색한 결과</strong>라고 나오는 데   
 Web Driver를 통하지 않고 직접 브라우저에 위 url을 통해 결과를 얻었을 때는  
 제목에 아이패드가 포함된 결과만을 얻음  
+  
 하지만 Web Driver를 통해 얻은 결과에는 제목에는 아이패드가 포함되어 있지 않고  
-게시글의 내용에만 포함된 경우가 존재했음  
+게시글의 내용에만 포함된 경우가 존재했음(아직 해결하지 못함)    
+
+위 과정을 통해서 원하는 날짜에 올라온 아이패드 관련 글을 50개씩 볼 수 있는 url을 얻었음
+
+### 4. 검색 결과 페이지 순회하기
+![검색결과 순회](./img/pageTraversal.png)
+<br>page가 포함된 url을 얻을 수 있음  
+https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=10050146
+&search.media=0&search.searchdate=2019-05-072019-05-07
+&search.defaultValue=1&search.exact=&search.include=&userDisplay=50
+&search.exclude=&search.option=0&search.sortBy=date&search.searchBy=1&search.searchBlockYn=0&search.includeAll=
+&search.query=%BE%C6%C0%CC%C6%D0%B5%E5&search.viewtype=title&search.page=2  
+
+카페에서 제공하는 기능과 브라우저에서 html코드를 주의깊게 봤더라면   
+필요로 하는 url을 한 번에 구할 수 있었을 것임  
+
+끝 페이지에서는 게시글의 개수가 50이하일 것이므로  
+게시글의 개수가 50개가 아닐때까지 순회를 반복하면 됨  
+(끝 페이지가 딱 50개라고 해도 다음 페이지로 넘어가면 등록된 게시글이 없으므로 반복문 탈출)  
+
+```r
+page = 1
+while(TRUE){
+  
+  remDr$navigate(pageUrl)
+  Sys.sleep(sample(3:6, 1))
+  remDr$switchToFrame("cafe_main")
+  
+  # get posts list
+  postList = remDr$findElements(using="css", value="#main-area  > div:nth-child(5) > table > tbody > tr")
+  
+  if(length(postList) != 50) break
+  page = page + 1
+  pageNum = paste0("search.page=", page, sep="")
+  pageUrl = gsub("search.page=.*", pageNum, pageUrl)
+}
+```
+  
