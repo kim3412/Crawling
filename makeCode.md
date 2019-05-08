@@ -13,6 +13,7 @@ queryInput = remDr$findElement(using="id", value="topLayerQueryInput")
 # "아이패드"를 utf-8로 변환한 값을 이용하여 검색
 queryInput$sendKeysToElement(list("\xEC\x95\x84\xEC\x9D\xB4\xED\x8C\xA8\xEB\x93\x9C", key="enter"))
 ```
+
 ### 2. frame 전환
 위 상태에서 페이지 소스를 받으면 아이패드 검색결과가 빠져 있음
 (상단의 내용과 좌측의 내용만 보임)
@@ -30,3 +31,17 @@ iframe에 있는 element를 이용하려면 창을 변경하는 것과 유사하
 ```r
 remDr$switchToFrame("cafe_main")
 ```
+
+### 3. 한 페이지에 가능한 많은 결과 보기
+![50개씩 보기](./img/numOfList.png)
+```r
+listSize50 = remDr$findElement(using="css", value="#listSizeSelectDiv > ul > li:nth-child(7) > a")
+remDr$navigate(listSize50$getElementAttribute("href"))
+remDr$switchToFrame("cafe_main")
+```
+프레임을 변경하지 않으면 위에서와 같이 상단과 좌측의 내용만 보임
+프레임을 변경하면 다시 15개의 아이템만 보임
+해결방법을 찾지 못해서 15개씩 얻어오기로 함
+
+### 4. 특정 날짜에 게시된 글만 보기
+
