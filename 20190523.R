@@ -13,6 +13,14 @@ fwrite(tmp, "D:/test.csv")
 
 
 # scrap comment
+# only when the comment exist
+# when get url list use a variable and remeber wheter the comment exist
+# tmp = sapply(postList, function(x){x$fineChildElement(using="class", value="cmt")
+# scrap in item url
+commentStatus = 1
 tmp = remDr$findElements(using="class", value="comm_body")
 comments = sapply(tmp, function(x){x$getElementText()}
 comments = paste(comments, collapse=" | ")
+
+# in error
+if(commentStatus == 0) 
