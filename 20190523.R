@@ -15,4 +15,4 @@ fwrite(tmp, "D:/test.csv")
 # scrap comment
 tmp = remDr$findElements(using="class", value="comm_body")
 comments = sapply(tmp, function(x){x$getElementText()}
-
+comments = paste(comments, collapse=" | ")
