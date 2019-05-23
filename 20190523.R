@@ -9,3 +9,10 @@ library(data.table)
 tmp = list(NULL, "abc", "defg")
 tmp[sapply(tmp, is.null)] = NA
 fwrite(tmp, "D:/test.csv")
+
+
+
+# scrap comment
+tmp = remDr$findElements(using="class", value="comm_body")
+comments = sapply(tmp, function(x){x$getElementText()}
+
