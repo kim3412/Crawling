@@ -21,10 +21,10 @@
 <br>
 검색결과 목록에서 얻은 url을 이용하여 판매글에 접근한 후 <strong>판매 여부, 가격, 작성자 아이디</strong>을 긁어왔다.
 <br><br>
-데이터를 수집을 위한 시행착오 과정은 <a href="https://github.com/kim3412/Crawling/blob/master/makeCode.md">makeCode.md</a> 참조   
-코드는 <a href="https://github.com/kim3412/Crawling/blob/master/crawling.R">crawling.R</a> 참조  
-<br><br>
 ![데이터파일내용](./img/dataset.PNG)
 <br>
-수집한 데이터를 저장한 내용은 <a href="https://github.com/kim3412/Crawling/tree/master/result">result</a> 
+수집한 데이터를 저장한 내용은 <a href="https://github.com/kim3412/Crawling/tree/master/result">result</a> 참조   
+<br><br>
+데이터를 수집을 위한 시행착오 과정은 <a href="https://github.com/kim3412/Crawling/blob/master/makeCode.md">makeCode.md</a> 참조   
+코드는 <a href="https://github.com/kim3412/Crawling/blob/master/crawling.R">crawling.R</a> 참조  
 <br><br><br>
