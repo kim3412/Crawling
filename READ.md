@@ -19,7 +19,7 @@
 <br><br>
 ![데이터수집목록2](./img/data2.png)
 <br>
-검색결과 목록에서 얻은 url을 이용하여 판매글에 접근한 후 <strong>판매 여부, 가격, 작성자 아이디</strong>을 긁어왔다.
+검색결과 목록에서 얻은 url을 이용하여 판매글에 접근한 후 <strong>판매 여부, 가격, 작성자 아이디</strong>를 긁어왔다.
 <br><br>
 ![데이터파일내용](./img/dataset.PNG)
 <br>
@@ -27,4 +27,6 @@
 <br><br>
 데이터를 수집을 위한 시행착오 과정은 <a href="https://github.com/kim3412/Crawling/blob/master/makeCode.md">makeCode.md</a> 참조   
 코드는 <a href="https://github.com/kim3412/Crawling/blob/master/crawling.R">crawling.R</a> 참조  
+<br><br>
+※ 게시글의 본문 내용을 긁어오긴 했으나 필요없는 반복되는 부분을 제거해야 하고 몇몇 글은 여러 행을 잡아먹음. 일단 txt로 저장  
 <br><br><br>
