@@ -23,7 +23,7 @@
 <br><br><br>
 ![데이터파일내용](./img/dataset.PNG)
 <br>
-수집한 데이터를 저장한 내용은 <a href="https://github.com/kim3412/Crawling/tree/master/result">result</a> 참조   
+수집한 데이터를 저장한 내용은 <a href="https://github.com/kim3412/Crawling/tree/master/data">data</a> 참조   
 <br><br>
 데이터를 수집을 위한 시행착오 과정은 <a href="https://github.com/kim3412/Crawling/blob/master/makeCode.md">makeCode.md</a> 참조   
 코드는 <a href="https://github.com/kim3412/Crawling/blob/master/crawling.R">crawling.R</a> 참조  
@@ -52,6 +52,10 @@
 - 키보드: <strong>(0, 1)</strong>, 키보드를 포함하지 않으면 0, 포함하면 1, 키보드도 10만원 상당의 고가이므로 가격에 영향을 미친다고 생각했음.  
 <br> 
 (개봉여부나 리퍼기간, 애플케어 여부 등은 제목에서 파악가능할 때도 있고 본문을 봐야할 때도 있음) 
+<br>
+전처리 후 분류한 데이터를 저장한 내용은 <a href="https://github.com/kim3412/Crawling/tree/master/data">data</a> 참조   
+dailyPost.csv는 하루동안 작성된 게시글 수 정보  
+pro.csv, pro2.csv, pro3.csv는 19일 동안 게시된 글에서 기종별로 분류한 후 기기 스펙을 표현한 자료이다.  
 <br><br><br>
 
 ### 4. 수집한 데이터
