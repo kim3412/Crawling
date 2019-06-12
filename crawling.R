@@ -61,7 +61,6 @@ while(TRUE){
     ### sales status, price are not always exists(so handle exception)
     
     # get posts list
-    
     postList = remDr$findElements(using="css", value="#main-area  > div:nth-child(5) > table > tbody > tr")
     ### postList list
     saleStatusVec = c()
